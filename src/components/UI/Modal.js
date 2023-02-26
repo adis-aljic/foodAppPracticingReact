@@ -1,10 +1,9 @@
 import classes from './Modal.module.css';
-import createPortal from 'react-dom';
+import { createPortal } from 'react-dom';
+import { Fragment } from 'react';
 
-const portalDestionation = document.getElementById('overlays');
-
-const Backdrop = () => {
-  return <div className={classes.backdrop}></div>;
+const Backdrop = (props) => {
+  return <div className={classes.backdrop} onClick={props.onClose}></div>;
 };
 
 const ModalOVerlay = (props) => {
@@ -16,13 +15,18 @@ const ModalOVerlay = (props) => {
 };
 
 const Modal = (props) => {
-  <>
-    {createPortal(<Backdrop />, portalDestionation)}
-    {createPortal(
-      <ModalOVerlay>{props.children}</ModalOVerlay>,
-      portalDestionation
-    )}
-  </>;
+  return (
+    <Fragment>
+      {createPortal(
+        <Backdrop onClose={props.onClose} />,
+        document.getElementById('overlays')
+      )}
+      {createPortal(
+        <ModalOVerlay>{props.children}</ModalOVerlay>,
+        document.getElementById('overlays')
+      )}
+    </Fragment>
+  );
 };
 
 export default Modal;
